@@ -9,17 +9,16 @@ class Game
     end
 
     def guess_letter
-        puts "Enter save to save the game or guess a letter to continue: "
+        puts "Enter save and hit enter (twice) to save or guess a letter to continue: "
         guess = gets.chomp
     
-        if guess.match(/save/)
-            puts "it works!"
-            guess
-        elsif guess.length > 1 || guess.match(/\d/) 
+        return "save" if guess == "save"
+
+        if guess.length > 1 || guess.match(/\d/) 
             loop do
                 puts "Please just enter one letter, no words or numbers: "
                 guess = gets.chomp
-                break if guess.length == 1 && !guess.match(/\d/) || guess.match(/save/)
+                break if guess.length == 1 && !guess.match(/\d/) || guess == "save"
             end
         end
         guess
@@ -53,15 +52,9 @@ class Game
     end
 
     def incorrect_guess
-        puts "miss count:"
+        puts "Incorrect letters:"
         puts @incorrect_guess.join(' ')
         puts ""
-    end
-
-    def save?(guess_letter)
-        if guess_letter == "save"
-            return true
-        end
     end
 
     def correct?(guess_letter)
@@ -80,6 +73,7 @@ class Game
         if @guesses == @clone_secret_word
             puts ""
             puts "You're the winner, the word is #{@secret_word}" 
+            puts "Press a key to exit"
             true
         end
     end
@@ -88,6 +82,7 @@ class Game
         if @incorrect == 8
             puts ""
             puts "You lost the game, the word was #{@secret_word}" 
+            puts "Press a key to exit"
             true
         end
     end
@@ -113,11 +108,7 @@ class Game
             incorrect_guess
             input = guess_letter
             correct?(input)
-            break if input == "save"
-
-            break if winner == true
-            
-            break if loser == true
+            break if input == "save" || winner == true || loser == true
         end
     end
 end
